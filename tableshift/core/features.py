@@ -13,8 +13,8 @@ from pandas.api.types import is_object_dtype, is_float_dtype, is_integer_dtype, 
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder, \
     FunctionTransformer, OrdinalEncoder
-from tableshift.core.discretization import KBinsDiscretizer
-from tableshift.core.utils import sub_illegal_chars
+from .discretization import KBinsDiscretizer
+from .utils import sub_illegal_chars
 
 
 def _contains_missing_values(df: pd.DataFrame) -> bool:
@@ -697,9 +697,13 @@ class Preprocessor:
                     "categorical_columns='passthrough' instead.")
             return data
 
+        # https://github.com/mlfoundations/tableshift/issues/8
         passthrough_columns = self.get_passthrough_columns(
             data,
-            passthrough_columns,
+            passthrough_columns,  # TODO: we should explicitly set the 'domain_label_colname' here!
+                                  # inside the get_passthrough_columns function, the 'domain_label_colname'
+                                  # will automatically be added to the set of passthroughcolumns
+            domain_label_colname=domain_label_colname,  # FIXME: 
             target_colname=target_colname)
 
         # All non-domain label passthrough columns will be cast to their
@@ -723,9 +727,9 @@ class Preprocessor:
 
         if domain_label_colname:
             # Case: fit the domain label transformer and apply it.
-            transformed.loc[:, domain_label_colname] = \
-                self.fit_transform_domain_labels(
-                    transformed.loc[:, domain_label_colname])
+                transformed.loc[:, domain_label_colname] = \
+                    self.fit_transform_domain_labels(
+                        transformed.loc[:, domain_label_colname])
         self._post_transform_summary(transformed)
         logging.info("transforming columns complete.")
         return transformed
