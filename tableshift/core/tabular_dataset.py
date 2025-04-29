@@ -13,7 +13,7 @@ import pandas as pd
 import ray.data
 import torch
 from pandas import DataFrame, Series
-from tableshift.third_party.domainbed import InfiniteDataLoader
+from ..third_party.domainbed import InfiniteDataLoader
 from torch.utils.data import DataLoader
 
 from .features import Preprocessor, PreprocessorConfig, is_categorical
