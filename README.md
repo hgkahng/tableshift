@@ -21,6 +21,26 @@ You can read more about TableShift at [tableshift.org](https://tableshift.org/in
 
 If you find an issue, please file a GitHub [issue](https://github.com/mlfoundations/tableshift/issues/new/choose).
 
+# Setup (by Hyungu)
+
+```bash
+# Create new virtual environment
+conda create -n <ENV_NAME> python=3.10
+
+# Activate environment
+conda activate <ENV_NAME>
+
+# Install packages
+pip install --upgrade pip "setuptools<69" wheel packaging
+pip install -r requirements.txt
+conda install -c menpo wget
+
+# Install tableshift
+pip install --no-deps .
+```
+
+Check this [jupyter notebook file](examples/unit_tests.ipynb) to see how datasets can be loaded.
+
 # Quickstart
 
 **Environment setup:** We recommend the use of docker with TableShift. Our dataset construction and model pipelines have a diverse set of dependencies that included non-Python files required to make some libraries work. As a result, we recommend you use the provided Docker image for using the benchmark, and suggest forking this Docker image for your own development.
